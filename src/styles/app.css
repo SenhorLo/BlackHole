@@ -1,0 +1,795 @@
+/* ============================================================== backdrop == */
+
+.singularity {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--void);
+}
+
+/*
+ * Readability veil.
+ *
+ * One fixed layer for the whole document rather than a scrim per section:
+ * section-level scrims meet at hard horizontal seams that slide across the
+ * object as you scroll. Fixed to the viewport, this can never seam, and it
+ * leaves the right side — where the hole sits — almost untouched.
+ */
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    rgba(5, 4, 10, 0.94) 0%,
+    rgba(5, 4, 10, 0.86) 26%,
+    rgba(5, 4, 10, 0.5) 48%,
+    rgba(5, 4, 10, 0.22) 68%,
+    rgba(5, 4, 10, 0.12) 100%
+  );
+}
+
+.singularity__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Shown only when WebGL2 is unavailable. Still a black hole, just a painted one. */
+.singularity__fallback {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 50% 50%, #000 0 15%, rgba(0, 0, 0, 0) 16%),
+    radial-gradient(circle at 50% 50%, rgba(255, 171, 61, 0.55) 15%, rgba(209, 69, 47, 0.22) 26%, rgba(10, 8, 19, 0) 46%),
+    radial-gradient(ellipse 70% 12% at 50% 50%, rgba(255, 243, 220, 0.5) 0 18%, rgba(255, 171, 61, 0.3) 34%, rgba(107, 20, 16, 0.14) 58%, rgba(5, 4, 10, 0) 78%),
+    radial-gradient(circle at 30% 20%, #14112a 0, var(--void) 60%);
+}
+
+/* ================================================================= shell == */
+
+.shell {
+  position: relative;
+  z-index: 2;
+}
+
+/* ================================================================ header == */
+
+.masthead {
+  position: fixed;
+  max-width: 108rem;
+  opacity: calc(1 - var(--descent, 0) * 26);
+  transition: opacity 0.4s var(--ease-out);
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 2.4vw, 1.85rem) var(--gutter);
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.masthead__mark {
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.masthead__sub {
+  display: none;
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.16em;
+  color: var(--ash);
+}
+
+@media (min-width: 48rem) {
+  .masthead__sub {
+    display: block;
+  }
+}
+
+/* ============================================================== sections == */
+
+.station {
+  position: relative;
+  padding-block: var(--section-pad);
+}
+
+/* Left-anchored, not centred: on a wide display a centred container drifts
+   into the middle and opens a dead gap on the left. */
+.station__inner {
+  max-width: 92rem;
+  padding-inline: var(--gutter);
+}
+
+/* Data displays that need the whole width. Equal gutters, so the field reads
+   as centred while still lining up with every other section's left edge. */
+.station--full .station__inner {
+  max-width: none;
+}
+
+.col {
+  max-width: var(--measure);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+.eyebrow__rule {
+  width: clamp(1.75rem, 5vw, 3.5rem);
+  height: 1px;
+  background: var(--hairline-strong);
+}
+
+.eyebrow__rule--draw {
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1s var(--ease-out) 0.14s;
+}
+
+[data-shown="true"] .eyebrow__rule--draw {
+  transform: none;
+}
+
+.title {
+  font-size: var(--step-3);
+  margin-bottom: clamp(1.25rem, 2.5vw, 1.9rem);
+  /* Gravitational redshift: the deeper you fall, the redder the page reads. */
+  color: color-mix(in oklab, var(--photon), var(--redshift) calc(var(--descent, 0) * 42%));
+}
+
+.lede {
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--ink);
+  font-weight: 300;
+}
+
+.body-text {
+  margin-top: 1.35rem;
+}
+
+.body-text + .body-text {
+  margin-top: 1.1rem;
+}
+
+.mark {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* ================================================================== hero == */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: clamp(3.5rem, 9vh, 7rem);
+  padding-top: 8rem;
+}
+
+.hero__inner {
+  max-width: 92rem;
+  width: 100%;
+  padding-inline: var(--gutter);
+}
+
+.hero__line {
+  display: block;
+}
+
+.hero__title {
+  font-size: var(--step-hero);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  margin-bottom: clamp(1.5rem, 3.5vw, 2.75rem);
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero__lede {
+  max-width: 33rem;
+  font-size: var(--step-1);
+  font-weight: 300;
+  line-height: 1.48;
+  color: var(--ink);
+}
+
+.hero__cue {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.hero__cue-line {
+  position: relative;
+  width: 5rem;
+  height: 1px;
+  background: var(--hairline-strong);
+  overflow: hidden;
+}
+
+.hero__cue-line::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 40%;
+  background: var(--gold);
+  animation: drain 2.6s var(--ease) infinite;
+}
+
+@keyframes drain {
+  0% {
+    transform: translateX(-100%);
+  }
+  70%,
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+/* ============================================================== panels === */
+
+/*
+ * Instrument panel. The page's one structural rule for chrome: anything the
+ * reader can operate sits in one of these, and nothing else does.
+ */
+.panel {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  border: 1px solid var(--hairline);
+  padding: clamp(1.35rem, 3.5vw, 2.25rem);
+  background: linear-gradient(155deg, rgba(18, 16, 31, 0.82), rgba(5, 4, 10, 0.68));
+  backdrop-filter: blur(16px);
+}
+
+/* ============================================================== anatomy === */
+
+.anatomy {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+  max-width: 60rem;
+}
+
+@media (min-width: 62rem) {
+  .anatomy {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+  }
+}
+
+.anatomy__diagram {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 24rem;
+}
+
+.anatomy__svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.anatomy__ring {
+  fill: none;
+  stroke: rgba(196, 190, 214, 0.42);
+  stroke-width: 1;
+  transition:
+    stroke 0.35s var(--ease-out),
+    stroke-width 0.35s var(--ease-out),
+    opacity 0.35s var(--ease-out);
+}
+
+.anatomy__ring[data-active="true"] {
+  stroke: var(--gold);
+  stroke-width: 1.75;
+}
+
+.anatomy__ring[data-dim="true"] {
+  opacity: 0.28;
+}
+
+.anatomy__label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  fill: var(--ash-dim);
+  transition: fill 0.35s var(--ease-out);
+}
+
+.anatomy__label[data-active="true"] {
+  fill: var(--gold);
+}
+
+.anatomy__list {
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.anatomy__item {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.anatomy__trigger {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 0;
+  text-align: left;
+  transition: color 0.3s var(--ease-out);
+}
+
+.anatomy__trigger[aria-expanded="true"] {
+  color: var(--gold);
+}
+
+.anatomy__name {
+  font-family: var(--display);
+  font-size: var(--step-1);
+  color: currentColor;
+}
+
+.anatomy__trigger[aria-expanded="false"] .anatomy__name {
+  color: var(--ink);
+}
+
+.anatomy__radius {
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.12em;
+  color: var(--ash-dim);
+  white-space: nowrap;
+}
+
+.anatomy__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--ease-out);
+}
+
+.anatomy__panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.anatomy__panel-inner {
+  overflow: hidden;
+}
+
+.anatomy__body {
+  padding-bottom: 1.35rem;
+  font-size: var(--step--1);
+  line-height: 1.7;
+  color: var(--ash);
+  max-width: 30rem;
+}
+
+/* =============================================================== ledger === */
+
+.ledger {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  max-width: 62rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.ledger__row {
+  display: grid;
+  gap: 0.75rem clamp(1.5rem, 5vw, 4rem);
+  padding-block: clamp(2rem, 4vw, 3.1rem);
+  border-bottom: 1px solid var(--hairline);
+}
+
+@media (min-width: 52rem) {
+  .ledger__row {
+    grid-template-columns: 13rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.ledger__figure {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.ledger__value {
+  font-family: var(--display);
+  font-size: var(--step-4);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--row-color, var(--gold));
+}
+
+.ledger__unit {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.1em;
+  color: var(--ash-dim);
+}
+
+.ledger__title {
+  font-family: var(--display);
+  font-size: var(--step-2);
+  color: var(--ink);
+  line-height: 1.05;
+  margin-bottom: 0.75rem;
+}
+
+.ledger__body {
+  font-size: var(--step-0);
+  line-height: 1.68;
+  /* ~75 characters: a readable measure, and it keeps the text off the disk */
+  max-width: 34rem;
+  color: #b3adc4;
+}
+
+/* ================================================================ scale === */
+
+.scale {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+}
+
+/* These captions are the one block of text that has to live over the disk,
+   so they carry their own shadow instead of a box behind them. */
+.scale__ruler :is(.scale__name, .scale__mass, .scale__detail),
+.scale__decade-label {
+  text-shadow: 0 1px 10px rgba(5, 4, 10, 0.95), 0 0 3px rgba(5, 4, 10, 0.9);
+}
+
+.scale__ruler {
+  position: relative;
+  display: none;
+  height: 17rem;
+  border-bottom: 1px solid var(--hairline-strong);
+}
+
+@media (min-width: 60rem) {
+  .scale__ruler {
+    display: block;
+  }
+}
+
+.scale__decade {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 0.5rem;
+  background: var(--hairline-strong);
+}
+
+.scale__decade-label {
+  position: absolute;
+  top: 0.75rem;
+  left: 0;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--ash-dim);
+  white-space: nowrap;
+}
+
+.scale__point {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(0deg, var(--point-color) 0%, rgba(164, 157, 186, 0.32) 34%, rgba(164, 157, 186, 0) 100%);
+}
+
+.scale__dot {
+  position: absolute;
+  bottom: -3.5px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  border-radius: 50%;
+  background: var(--point-color);
+  box-shadow: 0 0 12px var(--point-color);
+}
+
+.scale__caption {
+  position: absolute;
+  top: -1.5rem;
+  width: 11rem;
+}
+
+.scale__name {
+  font-family: var(--display);
+  font-size: var(--step-1);
+  color: var(--ink);
+  line-height: 1.05;
+}
+
+.scale__mass {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--point-color);
+  margin-top: 0.25rem;
+}
+
+.scale__detail {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--ash);
+  margin-top: 0.3rem;
+}
+
+.scale__axis-label {
+  margin-top: 2.6rem;
+}
+
+/* stacked variant for narrow screens */
+.scale__list {
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--hairline);
+}
+
+@media (min-width: 60rem) {
+  .scale__list {
+    display: none;
+  }
+}
+
+.scale__list-item {
+  display: grid;
+  gap: 0.3rem;
+  padding-block: 1.15rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.scale__list-bar {
+  height: 2px;
+  background: var(--point-color);
+  margin-top: 0.35rem;
+}
+
+/* ================================================================= time === */
+
+.dilation {
+  max-width: 42rem;
+}
+
+.dilation__figures {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 34rem) {
+  .dilation__figures {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.dilation__figure {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.dilation__num {
+  font-family: var(--display);
+  font-size: var(--step-3);
+  line-height: 0.9;
+  color: var(--photon);
+}
+
+.dilation__num--far {
+  color: var(--blueshift);
+}
+
+.dilation__slider-row {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.dilation__slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2rem;
+  background: none;
+  cursor: ew-resize;
+}
+
+.dilation__slider::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--hairline-strong);
+}
+
+.dilation__slider::-moz-range-track {
+  height: 1px;
+  background: var(--hairline-strong);
+}
+
+.dilation__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 3px;
+  height: 1.5rem;
+  margin-top: -0.75rem;
+  background: var(--gold);
+  border: none;
+  box-shadow: 0 0 14px rgba(255, 171, 61, 0.7);
+}
+
+.dilation__slider::-moz-range-thumb {
+  width: 3px;
+  height: 1.5rem;
+  border: none;
+  border-radius: 0;
+  background: var(--gold);
+  box-shadow: 0 0 14px rgba(255, 171, 61, 0.7);
+}
+
+.dilation__legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dilation__caption {
+  margin-top: 1.5rem;
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--ash);
+  border-top: 1px solid var(--hairline);
+  padding-top: 1.25rem;
+}
+
+/* ============================================================ horizonte === */
+
+.horizon-note {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-left: clamp(1rem, 2.5vw, 1.75rem);
+  border-left: 1px solid var(--redshift);
+  font-family: var(--display);
+  font-size: var(--step-2);
+  font-style: italic;
+  line-height: 1.28;
+  color: var(--photon);
+  max-width: 30rem;
+}
+
+/* ========================================================= singularity === */
+
+.singularity-station {
+  min-height: 96svh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--section-pad);
+}
+
+.singularity-station__line {
+  font-family: var(--display);
+  font-size: var(--step-3);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+  color: color-mix(in oklab, var(--photon), var(--redshift) 46%);
+  max-width: 30rem;
+}
+
+.singularity-station__after {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  max-width: 27rem;
+  font-size: var(--step--1);
+  line-height: 1.75;
+}
+
+/* ============================================================== footer === */
+
+/* No solid fill: a painted footer cuts a hard line across the backdrop. */
+/*
+ * Horizon crossing. An empty scroll region whose only job is to take the
+ * backdrop to pure black before the footer arrives.
+ *
+ * Length is load-bearing: too long and the black reads as a broken page
+ * rather than a beat. The eclipse completes half a viewport in, leaving
+ * roughly a third of a screen of true darkness before the footer rises.
+ */
+.crossing {
+  position: relative;
+  z-index: 2;
+  height: 80vh;
+}
+
+.eclipse {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: var(--void);
+  opacity: var(--eclipse, 0);
+}
+
+.footer {
+  position: relative;
+  z-index: 4;
+  border-top: 1px solid var(--hairline);
+  padding-block: clamp(3rem, 7vw, 5rem);
+}
+
+.footer__inner {
+  max-width: 92rem;
+  padding-inline: var(--gutter);
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+@media (min-width: 52rem) {
+  .footer__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
+}
+
+.footer__sources {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.footer__source {
+  display: grid;
+  gap: 0.15rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.footer__source-label {
+  font-size: var(--step--1);
+  color: var(--ink);
+}
+
+.footer__colophon {
+  font-size: var(--step--1);
+  line-height: 1.7;
+  max-width: 26rem;
+}
+
+.footer__top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+  font-family: var(--mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ash);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline-strong);
+  padding-bottom: 0.3rem;
+  transition: color 0.3s var(--ease-out);
+}
+
+.footer__top:hover {
+  color: var(--gold);
+}

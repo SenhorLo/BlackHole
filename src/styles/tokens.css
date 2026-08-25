@@ -1,0 +1,52 @@
+/*
+ * Palette derived from the object itself, not from taste.
+ *
+ * An accretion disk is a blackbody gradient sheared by relativistic beaming:
+ * the limb rotating toward us is boosted into blue-white, the top of the ramp
+ * sits at gold, and the receding limb slides through vermilion into a dead
+ * ember red. Those four values are the entire accent system.
+ */
+
+:root {
+  /* void */
+  --void: #05040a;
+  --void-2: #0a0813;
+  --void-3: #12101f;
+
+  /* the doppler ramp */
+  --blueshift: #79cdff;
+  --photon: #fff3dc;
+  --gold: #ffab3d;
+  --redshift: #d1452f;
+  --ember: #6b1410;
+
+  /* text */
+  --ink: #f2eefc;
+  --ash: #a49dba;
+  --ash-dim: #6a6382;
+  --hairline: rgba(164, 157, 186, 0.16);
+  --hairline-strong: rgba(164, 157, 186, 0.34);
+
+  /* type */
+  --display: "Jost", "Futura", "Century Gothic", ui-sans-serif, sans-serif;
+  --body: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --step--2: clamp(0.68rem, 0.66rem + 0.08vw, 0.74rem);
+  --step--1: clamp(0.79rem, 0.76rem + 0.12vw, 0.87rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
+  --step-1: clamp(1.2rem, 1.12rem + 0.35vw, 1.42rem);
+  --step-2: clamp(1.55rem, 1.36rem + 0.85vw, 2.1rem);
+  --step-3: clamp(2.1rem, 1.7rem + 1.8vw, 3.4rem);
+  --step-4: clamp(2.8rem, 1.9rem + 4vw, 5.6rem);
+  --step-hero: clamp(3.4rem, 1rem + 11vw, 10.5rem);
+
+  /* rhythm */
+  --gutter: clamp(1.35rem, 5vw, 6rem);
+  --measure: 34rem;
+  --section-pad: clamp(6.5rem, 14vh, 11rem);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.28, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
