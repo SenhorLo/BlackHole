@@ -11,6 +11,57 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------ scrollbar -- */
+
+/*
+ * The scrollbar is the only chrome the browser draws for us, and by default
+ * it is the one bright object on the page. Squared off and hairline-thin, it
+ * matches the dilation slider's handle; its colour rides the doppler ramp, so
+ * it cools at the top of the document and goes to ember near the horizon.
+ *
+ * Every colour is declared plainly first, so a browser without color-mix
+ * still gets the muted version rather than a default one.
+ */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #4a4468 transparent;
+  scrollbar-color: color-mix(in oklab, #4a4468, var(--redshift) calc(var(--descent, 0) * 55%))
+    transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/*
+ * Chromium ignores these pseudo-elements once scrollbar-width is set, so they
+ * are here for Safari and older engines only. Kept visually equivalent to the
+ * standard properties above rather than richer, so the two paths agree.
+ */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4a4468;
+  background-color: color-mix(in oklab, #4a4468, var(--redshift) calc(var(--descent, 0) * 55%));
+  /* transparent border + padding-box clip leaves a 4px bar, not a fat slug */
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gold);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
 
 body {
